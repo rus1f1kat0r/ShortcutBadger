@@ -26,7 +26,7 @@ public class SamsungHomeBadger extends ShortcutBadger {
     @Override
     protected void executeBadge(int badgeCount) throws ShortcutBadgeException {
         Uri mUri = Uri.parse(CONTENT_URI);
-        ContentResolver contentResolver = mContext.getContentResolver();
+        ContentResolver contentResolver = getContext().getContentResolver();
         Cursor cursor = null;
         try {
             cursor = contentResolver.query(mUri, CONTENT_PROJECTION, "package=?", new String[]{getContextPackageName()}, null);

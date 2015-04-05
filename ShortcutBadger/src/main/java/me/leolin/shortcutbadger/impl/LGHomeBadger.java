@@ -27,7 +27,7 @@ public class LGHomeBadger extends ShortcutBadger {
         intent.putExtra(INTENT_EXTRA_BADGE_COUNT, badgeCount);
         intent.putExtra(INTENT_EXTRA_PACKAGENAME, getContextPackageName());
         intent.putExtra(INTENT_EXTRA_ACTIVITY_NAME, getEntryActivityName());
-        mContext.sendBroadcast(intent);
+        getContext().sendBroadcast(intent);
     }
 
     @Override

@@ -23,12 +23,12 @@ public class AndroidHomeBadger extends ShortcutBadger {
 
     @Override
     protected void executeBadge(int badgeCount) throws ShortcutBadgeException {
-        byte[] bytes = ImageUtil.drawBadgeOnAppIcon(mContext, badgeCount);
-        String appName = mContext.getResources().getText(mContext.getResources().getIdentifier("app_name",
+        byte[] bytes = ImageUtil.drawBadgeOnAppIcon(getContext(), badgeCount);
+        String appName = getContext().getResources().getText(getContext().getResources().getIdentifier("app_name",
                 "string", getContextPackageName())).toString();
 
         Uri mUri = Uri.parse(CONTENT_URI);
-        ContentResolver contentResolver = mContext.getContentResolver();
+        ContentResolver contentResolver = getContext().getContentResolver();
         ContentValues contentValues = new ContentValues();
         contentValues.put("iconType", 1);
         contentValues.put("itemType", 1);

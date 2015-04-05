@@ -27,7 +27,7 @@ public class AdwHomeBadger extends ShortcutBadger {
         Intent intent = new Intent(INTENT_UPDATE_COUNTER);
         intent.putExtra(PACKAGENAME, getContextPackageName());
         intent.putExtra(COUNT, badgeCount);
-        mContext.sendBroadcast(intent);
+        getContext().sendBroadcast(intent);
     }
 
     @Override

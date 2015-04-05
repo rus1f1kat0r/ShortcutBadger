@@ -30,7 +30,7 @@ public class SonyHomeBadger extends ShortcutBadger {
         intent.putExtra(INTENT_EXTRA_ACTIVITY_NAME, getEntryActivityName());
         intent.putExtra(INTENT_EXTRA_MESSAGE, String.valueOf(badgeCount));
         intent.putExtra(INTENT_EXTRA_SHOW_MESSAGE, badgeCount > 0);
-        mContext.sendBroadcast(intent);
+        getContext().sendBroadcast(intent);
     }
 
     @Override

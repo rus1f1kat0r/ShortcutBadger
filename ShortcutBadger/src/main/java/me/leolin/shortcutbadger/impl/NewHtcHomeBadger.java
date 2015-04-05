@@ -32,12 +32,12 @@ public class NewHtcHomeBadger extends ShortcutBadger {
         ComponentName localComponentName = new ComponentName(getContextPackageName(), getEntryActivityName());
         intent1.putExtra(EXTRA_COMPONENT, localComponentName.flattenToShortString());
         intent1.putExtra(EXTRA_COUNT, badgeCount);
-        mContext.sendBroadcast(intent1);
+        getContext().sendBroadcast(intent1);
 
         Intent intent = new Intent(INTENT_UPDATE_SHORTCUT);
         intent.putExtra(PACKAGENAME, getContextPackageName());
         intent.putExtra(COUNT, badgeCount);
-        mContext.sendBroadcast(intent);
+        getContext().sendBroadcast(intent);
     }
 
     @Override

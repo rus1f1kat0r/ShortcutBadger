@@ -34,7 +34,7 @@ public class NovaHomeBadger extends ShortcutBadger {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TAG, getContextPackageName() + "/" + getEntryActivityName());
             contentValues.put(COUNT, badgeCount);
-            mContext.getContentResolver().insert(Uri.parse(CONTENT_URI), contentValues);
+            getContext().getContentResolver().insert(Uri.parse(CONTENT_URI), contentValues);
         } catch (IllegalArgumentException ex) {
             /* Fine, TeslaUnread is not installed. */
         } catch (Exception ex) {

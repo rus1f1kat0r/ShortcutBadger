@@ -29,7 +29,7 @@ public class SolidHomeBadger extends ShortcutBadger {
         intent.putExtra(PACKAGENAME, getContextPackageName());
         intent.putExtra(COUNT, badgeCount);
         intent.putExtra(CLASS, getEntryActivityName());
-        mContext.sendBroadcast(intent);
+        getContext().sendBroadcast(intent);
     }
 
     @Override
