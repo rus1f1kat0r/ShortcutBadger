@@ -1,5 +1,23 @@
 apply plugin: 'com.android.library'
 
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://is-artifactory.corp.mail.ru/artifactory/repo' }
+}
+
 android {
 
     compileSdkVersion 19
@@ -14,5 +32,17 @@ android {
     
 
 }
-
+apply plugin: 'android-maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "${artifactory_contextUrl}") {
+            repoKey = 'android-artifact-repo'
+            authentication(userName: artifactory_user, password: artifactory_password)
+        }
+        pom.groupId = 'ru.mail'
+        pom.artifactId = 'ShortcutBadger'
+        pom.version = '1.0.2'
+        pom.packaging = 'aar'
+    }
+}
 //apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
