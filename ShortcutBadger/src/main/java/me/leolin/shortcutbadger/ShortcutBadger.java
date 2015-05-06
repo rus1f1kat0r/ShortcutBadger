@@ -90,8 +90,10 @@ public abstract class ShortcutBadger {
     public abstract List<String> getSupportLaunchers();
 
     protected String getEntryActivityName() {
-        ComponentName componentName = mContext.getPackageManager().getLaunchIntentForPackage(mContext.getPackageName()).getComponent();
-        return componentName.getClassName();
+        PackageManager packageManager = mContext.getPackageManager();
+        Intent launchIntent = packageManager == null ? null : packageManager.getLaunchIntentForPackage(mContext.getPackageName());
+        ComponentName componentName = launchIntent == null ? null : launchIntent.getComponent();
+        return componentName == null ? "" : componentName.getClassName();
     }
 
     protected String getContextPackageName() {
