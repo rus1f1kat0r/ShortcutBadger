@@ -26,4 +26,8 @@ public class StubShortcutBadger extends ShortcutBadger {
     public List<String> getSupportLaunchers() {
         return Collections.emptyList();
     }
+
+    protected boolean isRealBadger(){
+        return false;
+    }
 }

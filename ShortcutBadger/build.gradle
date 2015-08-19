@@ -41,7 +41,7 @@ uploadArchives {
         }
         pom.groupId = 'ru.mail'
         pom.artifactId = 'ShortcutBadger'
-        pom.version = '1.0.3-ANDMAIL-4354-SNAPSHOT'
+        pom.version = '1.0.3-ANDMAIL-4442-1-SNAPSHOT'
         pom.packaging = 'aar'
     }
 }

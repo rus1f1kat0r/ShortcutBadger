@@ -10,6 +10,7 @@ import android.os.Build;
 
 import me.leolin.shortcutbadger.impl.*;
 
+import java.lang.String;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 public abstract class ShortcutBadger {
 
     private static final List<BadgerFactory> BADGERS = new ArrayList<BadgerFactory>();
+    private static boolean sDebugMode = false;
 
     static {
         BADGERS.add(new AdwHomeBadgerFactory());
@@ -48,18 +50,25 @@ public abstract class ShortcutBadger {
 
     protected abstract void executeBadge(int badgeCount) throws ShortcutBadgeException;
 
+    protected boolean isRealBadger(){
+        return true;
+    }
+
+    public static boolean hasRealBadger(Context context) throws ShortcutBadgeException {
+        try {
+            return getShortcutBadger(context).isRealBadger();
+        } catch (Throwable e) {
+            throw new ShortcutBadgeException("Unable to execute badge:" + e.getMessage());
+        }
+    }
+
     public static void setBadge(Context context, int badgeCount) throws ShortcutBadgeException {
         //badgeCount should between 0 to 99
         badgeCount = Math.max(badgeCount, MIN_BADGE_COUNT);
         badgeCount = Math.min(badgeCount, MAX_BADGE_COUNT);
-        //find the home launcher Package
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        String currentHomePackage = resolveInfo.activityInfo.packageName;
 
         try {
-            ShortcutBadger shortcutBadger = getShortcutBadger(currentHomePackage, context);
+            ShortcutBadger shortcutBadger = getShortcutBadger(context);
             shortcutBadger.executeBadge(badgeCount);
         } catch (Throwable e) {
             throw new ShortcutBadgeException("Unable to execute badge:" + e.getMessage());
@@ -67,8 +76,12 @@ public abstract class ShortcutBadger {
 
     }
 
-    private static ShortcutBadger getShortcutBadger(String currentHomePackage, Context context) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private static ShortcutBadger getShortcutBadger(Context context) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         if (sInstance != null) {
+            return sInstance;
+        }
+        if(sDebugMode){
+            sInstance = new DebugModeHomeBadger(context);
             return sInstance;
         }
         // Workaround for Meizu:
@@ -77,14 +90,27 @@ public abstract class ShortcutBadger {
         if (Build.MANUFACTURER.toLowerCase().contains("meizu")) {
             return new StubShortcutBadger(context);
         }
+        String currentHomePackage = getCurrentHomePackage(context);
         for (BadgerFactory factory : BADGERS) {
             ShortcutBadger shortcutBadger = factory.createBadger(context);
             if (shortcutBadger.getSupportLaunchers().contains(currentHomePackage)) {
                 sInstance = shortcutBadger;
-                break;
+                return sInstance;
             }
         }
         return new StubShortcutBadger(context);
+    }
+
+    private static String getCurrentHomePackage(Context context) {
+        //find the home launcher Package
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return resolveInfo.activityInfo.packageName;
+    }
+
+    public static void setDebugMode(boolean debugMode) {
+        sDebugMode = debugMode;
     }
 
     public abstract List<String> getSupportLaunchers();
